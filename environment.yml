@@ -1,0 +1,9 @@
+name: molwallst
+channels:
+  - conda-forge
+dependencies:
+  - python=3.7.2
+  - streamlit
+  - pandas
+  - rdkit
+  - rsconnect-python
