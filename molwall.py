@@ -36,7 +36,7 @@ def rdimage(mol: rdkit.Chem.Mol) -> bytes:
     return buf.getvalue()
 
 
-@st.cache
+@st.cache_data
 def rdimage_from_smi(smi: str) -> bytes:
     return rdimage(rdkit.Chem.MolFromSmiles(smi))
 
@@ -130,13 +130,15 @@ if "df" not in st.session_state:
         df = pd.read_csv(local_file_name)
         add_df_to_session(df)
     else:
-        st.write("""
+        st.write(
+            """
             ### Welcome to Mol Wall.
             
             Please upload a CSV file with a SMILES column 
             (see [examples](https://github.com/Augmented-Drug-Design-Human-in-the-Loop/mol-wall/blob/main/tests/data/)),
             or load sample molecules.
-        """)
+        """
+        )
         label = "Upload a CSV file with SMILES column"
         uploaded_file = st.sidebar.file_uploader(label, type=["csv", "csv.gz"])
         if uploaded_file is not None:
@@ -156,6 +158,9 @@ if "df" in st.session_state:
     st.download_button(
         label="Download data as CSV",
         data=st.session_state.df.to_csv(index=False).encode("utf-8"),
-        file_name=st.session_state["uploaded_file"].split('.csv')[0] + "_with_ratings.csv"  if st.session_state["uploaded_file"] is not None else "file_with_ratings.csv",
+        file_name=st.session_state["uploaded_file"].split(".csv")[0]
+        + "_with_ratings.csv"
+        if st.session_state["uploaded_file"] is not None
+        else "file_with_ratings.csv",
         mime="text/csv",
     )
